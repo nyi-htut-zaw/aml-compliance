@@ -61,7 +61,7 @@ import { AuditEventDto } from '../../core/models/models';
               <td><span class="module-chip">{{ ev.module }}</span></td>
               <td><span class="action-tag">{{ ev.action }}</span></td>
               <td><strong>{{ ev.actorUsername || 'SYSTEM_DAEMON' }}</strong></td>
-              <td class="font-mono">{{ ev.entityType }} &bull; {{ ev.entityId?.substring(0, 8) }}...</td>
+              <td class="font-mono">{{ ev.entityType }} &bull; {{ ev.entityId.substring(0, 8) }}...</td>
               <td>{{ ev.description }}</td>
             </tr>
           </tbody>

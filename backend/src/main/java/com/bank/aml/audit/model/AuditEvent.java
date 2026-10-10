@@ -1,6 +1,8 @@
 package com.bank.aml.audit.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -40,9 +42,11 @@ public class AuditEvent {
     private String entityId;
 
     @Column(name = "before_state_json", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
     private String beforeStateJson;
 
     @Column(name = "after_state_json", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
     private String afterStateJson;
 
     @Column(columnDefinition = "TEXT")
