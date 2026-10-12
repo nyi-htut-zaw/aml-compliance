@@ -3,11 +3,10 @@
 -- V1 Initial Schema: Normalized Relational Tables, Constraints & Indexes
 -- ============================================================================
 
--- CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- 1. Identity, Organization & Branches
 CREATE TABLE organizations (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     code VARCHAR(50) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     country_code VARCHAR(3) NOT NULL,
@@ -17,7 +16,7 @@ CREATE TABLE organizations (
 );
 
 CREATE TABLE branches (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
     code VARCHAR(50) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
@@ -28,7 +27,7 @@ CREATE TABLE branches (
 );
 
 CREATE TABLE departments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     branch_id UUID NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
     code VARCHAR(50) NOT NULL,
     name VARCHAR(255) NOT NULL,
@@ -37,7 +36,7 @@ CREATE TABLE departments (
 );
 
 CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     branch_id UUID REFERENCES branches(id) ON DELETE SET NULL,
     username VARCHAR(100) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -53,14 +52,14 @@ CREATE TABLE users (
 );
 
 CREATE TABLE roles (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     name VARCHAR(50) NOT NULL UNIQUE, -- ROLE_ADMIN, ROLE_COMPLIANCE_OFFICER, ROLE_MLRO, ROLE_SENIOR_ANALYST, ROLE_ANALYST, ROLE_AUDITOR
     description VARCHAR(255) NOT NULL,
     is_system BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE permissions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     code VARCHAR(100) NOT NULL UNIQUE,
     module VARCHAR(50) NOT NULL,
     description VARCHAR(255) NOT NULL
@@ -80,7 +79,7 @@ CREATE TABLE role_permissions (
 
 -- Maker-Checker segregation of duties
 CREATE TABLE approval_requests (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     entity_type VARCHAR(50) NOT NULL, -- RULE, CASE_CLOSURE, STR_FILING, CUSTOMER_OVERRIDE, UBO_OVERRIDE
     entity_id VARCHAR(100) NOT NULL,
     action_type VARCHAR(50) NOT NULL, -- CREATE, UPDATE, DELETE, CLOSE, APPROVE_SUBMISSION
@@ -96,7 +95,7 @@ CREATE TABLE approval_requests (
 
 -- 2. Customer 360, KYC & Due Diligence
 CREATE TABLE customers (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     branch_id UUID NOT NULL REFERENCES branches(id),
     customer_type VARCHAR(20) NOT NULL, -- INDIVIDUAL, LEGAL_ENTITY
     customer_number VARCHAR(50) NOT NULL UNIQUE,
@@ -122,7 +121,7 @@ CREATE TABLE customers (
 );
 
 CREATE TABLE customer_identifiers (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     id_type VARCHAR(50) NOT NULL, -- PASSPORT, NATIONAL_ID, TAX_NUMBER, LEI, DRIVERS_LICENSE, INCORP_CERT
     id_number VARCHAR(100) NOT NULL,
@@ -134,7 +133,7 @@ CREATE TABLE customer_identifiers (
 );
 
 CREATE TABLE customer_addresses (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     address_type VARCHAR(50) NOT NULL, -- REGISTERED, RESIDENTIAL, OPERATIONAL, MAILING
     street_line1 VARCHAR(255) NOT NULL,
@@ -148,7 +147,7 @@ CREATE TABLE customer_addresses (
 );
 
 CREATE TABLE beneficial_owners (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     entity_customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     owner_customer_id UUID REFERENCES customers(id) ON DELETE SET NULL,
     owner_name VARCHAR(255) NOT NULL,
@@ -162,7 +161,7 @@ CREATE TABLE beneficial_owners (
 );
 
 CREATE TABLE customer_relationships (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     from_customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     to_customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     relationship_type VARCHAR(50) NOT NULL, -- PARENT_COMPANY, SUBSIDIARY, DIRECTOR, SHAREHOLDER, SPOUSE, BUSINESS_PARTNER
@@ -171,7 +170,7 @@ CREATE TABLE customer_relationships (
 );
 
 CREATE TABLE kyc_reviews (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     review_type VARCHAR(30) NOT NULL, -- ONBOARDING, PERIODIC_ANNUAL, EVENT_DRIVEN, EDD_ESCALATION
     due_diligence_level VARCHAR(20) NOT NULL, -- SIMPLIFIED, STANDARD, ENHANCED
@@ -187,7 +186,7 @@ CREATE TABLE kyc_reviews (
 );
 
 CREATE TABLE document_metadata (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     entity_type VARCHAR(50) NOT NULL, -- CUSTOMER, KYC_REVIEW, CASE, STR_REPORT, TRANSACTION
     entity_id VARCHAR(100) NOT NULL,
     document_type VARCHAR(50) NOT NULL, -- PASSPORT, PROOF_OF_ADDRESS, UBO_REGISTER, INCORP_CERT, EDD_REPORT, CASE_EVIDENCE
@@ -203,7 +202,7 @@ CREATE TABLE document_metadata (
 
 -- 3. Accounts & Financial Transactions
 CREATE TABLE accounts (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     branch_id UUID NOT NULL REFERENCES branches(id),
     account_number VARCHAR(50) NOT NULL UNIQUE,
@@ -217,7 +216,7 @@ CREATE TABLE accounts (
 );
 
 CREATE TABLE transactions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     reference_number VARCHAR(100) NOT NULL UNIQUE,
     account_id UUID NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
     customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
@@ -240,7 +239,7 @@ CREATE TABLE transactions (
 
 -- 4. Screening, Watchlists & Hits
 CREATE TABLE watchlist_sources (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     name VARCHAR(255) NOT NULL,
     code VARCHAR(50) NOT NULL UNIQUE, -- OFAC_SDN, UN_CONSOLIDATED, EU_FSF, UK_OFSI, PEP_GLOBAL, SYNTHETIC_MOCK
     list_type VARCHAR(50) NOT NULL, -- SANCTIONS, PEP, ADVERSE_MEDIA
@@ -252,7 +251,7 @@ CREATE TABLE watchlist_sources (
 );
 
 CREATE TABLE watchlist_entries (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     source_id UUID NOT NULL REFERENCES watchlist_sources(id) ON DELETE CASCADE,
     entry_uid VARCHAR(100) NOT NULL,
     entry_type VARCHAR(20) NOT NULL, -- INDIVIDUAL, ENTITY, VESSEL, AIRCRAFT
@@ -268,7 +267,7 @@ CREATE TABLE watchlist_entries (
 );
 
 CREATE TABLE screening_runs (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     entity_type VARCHAR(50) NOT NULL, -- CUSTOMER, TRANSACTION, COUNTERPARTY
     entity_id VARCHAR(100) NOT NULL,
     run_type VARCHAR(30) NOT NULL, -- REAL_TIME, ON_DEMAND_BATCH, RE_SCREENING
@@ -279,7 +278,7 @@ CREATE TABLE screening_runs (
 );
 
 CREATE TABLE screening_matches (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     screening_run_id UUID REFERENCES screening_runs(id) ON DELETE SET NULL,
     customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
     transaction_id UUID REFERENCES transactions(id) ON DELETE SET NULL,
@@ -297,7 +296,7 @@ CREATE TABLE screening_matches (
 );
 
 CREATE TABLE adverse_media_records (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     headline VARCHAR(500) NOT NULL,
     source_name VARCHAR(255) NOT NULL,
@@ -314,7 +313,7 @@ CREATE TABLE adverse_media_records (
 
 -- 5. AML Rules & Detection Scenarios
 CREATE TABLE rules (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     rule_code VARCHAR(50) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
@@ -333,7 +332,7 @@ CREATE TABLE rules (
 
 -- 6. Risk Scoring Engine
 CREATE TABLE risk_assessments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     assessment_date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     overall_score NUMERIC(5,2) NOT NULL, -- 0.00 to 100.00
@@ -349,7 +348,7 @@ CREATE TABLE risk_assessments (
 
 -- 7. Alert Management
 CREATE TABLE alerts (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     alert_number VARCHAR(50) NOT NULL UNIQUE,
     title VARCHAR(255) NOT NULL,
     customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
@@ -371,7 +370,7 @@ CREATE TABLE alerts (
 
 -- 8. Case Management & Investigations
 CREATE TABLE cases (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     case_number VARCHAR(50) NOT NULL UNIQUE,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
@@ -402,7 +401,7 @@ CREATE TABLE case_transactions (
 );
 
 CREATE TABLE case_evidence (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     case_id UUID NOT NULL REFERENCES cases(id) ON DELETE CASCADE,
     evidence_type VARCHAR(50) NOT NULL, -- TRANSACTION_FLOW, SCREENING_HIT, DOCUMENT, ADVERSE_MEDIA, EXTERNAL_REPORT
     title VARCHAR(255) NOT NULL,
@@ -414,7 +413,7 @@ CREATE TABLE case_evidence (
 );
 
 CREATE TABLE case_tasks (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     case_id UUID NOT NULL REFERENCES cases(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     description TEXT,
@@ -426,7 +425,7 @@ CREATE TABLE case_tasks (
 );
 
 CREATE TABLE case_notes (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     case_id UUID NOT NULL REFERENCES cases(id) ON DELETE CASCADE,
     author_id UUID NOT NULL REFERENCES users(id),
     note_text TEXT NOT NULL,
@@ -436,7 +435,7 @@ CREATE TABLE case_notes (
 
 -- 9. Regulatory Reporting (STR / SAR)
 CREATE TABLE regulatory_reports (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     report_number VARCHAR(50) NOT NULL UNIQUE,
     report_type VARCHAR(20) NOT NULL, -- STR, SAR, CTR
     jurisdiction VARCHAR(50) NOT NULL, -- US_FINCEN, UK_NCA, EU_FIU, FATF_GENERIC
@@ -456,7 +455,7 @@ CREATE TABLE regulatory_reports (
 
 -- 10. Audit, Notifications & Batch Imports
 CREATE TABLE audit_events (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     correlation_id VARCHAR(100) NOT NULL,
     timestamp TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     actor_username VARCHAR(100) NOT NULL,
@@ -472,7 +471,7 @@ CREATE TABLE audit_events (
 );
 
 CREATE TABLE notifications (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     recipient_user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     message TEXT NOT NULL,
@@ -485,7 +484,7 @@ CREATE TABLE notifications (
 );
 
 CREATE TABLE batch_import_jobs (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     job_type VARCHAR(50) NOT NULL, -- TRANSACTIONS_CSV, CUSTOMERS_CSV, WATCHLIST_CSV
     filename VARCHAR(255) NOT NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'PENDING', -- PENDING, PROCESSING, COMPLETED, FAILED

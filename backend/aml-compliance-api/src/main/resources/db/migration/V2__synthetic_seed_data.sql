@@ -32,25 +32,25 @@ VALUES
 
 INSERT INTO permissions (id, code, module, description)
 VALUES
-(gen_random_uuid(), 'IAM_MANAGE', 'IAM', 'Manage users, branches and permissions'),
-(gen_random_uuid(), 'CUSTOMER_VIEW', 'KYC', 'View customer profiles and KYC records'),
-(gen_random_uuid(), 'CUSTOMER_EDIT', 'KYC', 'Create and edit customer records'),
-(gen_random_uuid(), 'CDD_APPROVE', 'KYC', 'Approve customer due diligence reviews'),
-(gen_random_uuid(), 'SCREENING_RUN', 'SCREENING', 'Run ad-hoc and batch screening'),
-(gen_random_uuid(), 'SCREENING_DISPOSE', 'SCREENING', 'Dispose and escalate screening matches'),
-(gen_random_uuid(), 'TM_VIEW', 'TM', 'View transactions and ingestion jobs'),
-(gen_random_uuid(), 'TM_INGEST', 'TM', 'Ingest transactions via API or CSV'),
-(gen_random_uuid(), 'RULES_MANAGE', 'RULES', 'Draft and edit detection rules'),
-(gen_random_uuid(), 'RULES_APPROVE', 'RULES', 'Checker approval for detection rules'),
-(gen_random_uuid(), 'ALERT_VIEW', 'ALERTS', 'View alerts and triage queues'),
-(gen_random_uuid(), 'ALERT_DISPOSE', 'ALERTS', 'Dispose and escalate alerts'),
-(gen_random_uuid(), 'CASE_VIEW', 'CASES', 'View cases and evidence registers'),
-(gen_random_uuid(), 'CASE_MANAGE', 'CASES', 'Manage case investigation and tasks'),
-(gen_random_uuid(), 'CASE_APPROVE', 'CASES', 'Approve case closure or escalation'),
-(gen_random_uuid(), 'STR_DRAFT', 'REPORTS', 'Draft suspicious activity reports'),
-(gen_random_uuid(), 'STR_APPROVE', 'REPORTS', 'Approve regulatory STR/SAR filings'),
-(gen_random_uuid(), 'STR_SUBMIT', 'REPORTS', 'Submit regulatory filings to FIU adapter'),
-(gen_random_uuid(), 'AUDIT_VIEW', 'AUDIT', 'View system and compliance audit events');
+(RANDOM_UUID(), 'IAM_MANAGE', 'IAM', 'Manage users, branches and permissions'),
+(RANDOM_UUID(), 'CUSTOMER_VIEW', 'KYC', 'View customer profiles and KYC records'),
+(RANDOM_UUID(), 'CUSTOMER_EDIT', 'KYC', 'Create and edit customer records'),
+(RANDOM_UUID(), 'CDD_APPROVE', 'KYC', 'Approve customer due diligence reviews'),
+(RANDOM_UUID(), 'SCREENING_RUN', 'SCREENING', 'Run ad-hoc and batch screening'),
+(RANDOM_UUID(), 'SCREENING_DISPOSE', 'SCREENING', 'Dispose and escalate screening matches'),
+(RANDOM_UUID(), 'TM_VIEW', 'TM', 'View transactions and ingestion jobs'),
+(RANDOM_UUID(), 'TM_INGEST', 'TM', 'Ingest transactions via API or CSV'),
+(RANDOM_UUID(), 'RULES_MANAGE', 'RULES', 'Draft and edit detection rules'),
+(RANDOM_UUID(), 'RULES_APPROVE', 'RULES', 'Checker approval for detection rules'),
+(RANDOM_UUID(), 'ALERT_VIEW', 'ALERTS', 'View alerts and triage queues'),
+(RANDOM_UUID(), 'ALERT_DISPOSE', 'ALERTS', 'Dispose and escalate alerts'),
+(RANDOM_UUID(), 'CASE_VIEW', 'CASES', 'View cases and evidence registers'),
+(RANDOM_UUID(), 'CASE_MANAGE', 'CASES', 'Manage case investigation and tasks'),
+(RANDOM_UUID(), 'CASE_APPROVE', 'CASES', 'Approve case closure or escalation'),
+(RANDOM_UUID(), 'STR_DRAFT', 'REPORTS', 'Draft suspicious activity reports'),
+(RANDOM_UUID(), 'STR_APPROVE', 'REPORTS', 'Approve regulatory STR/SAR filings'),
+(RANDOM_UUID(), 'STR_SUBMIT', 'REPORTS', 'Submit regulatory filings to FIU adapter'),
+(RANDOM_UUID(), 'AUDIT_VIEW', 'AUDIT', 'View system and compliance audit events');
 
 -- Assign all permissions to ROLE_ADMIN and ROLE_COMPLIANCE_OFFICER
 INSERT INTO role_permissions (role_id, permission_id)
@@ -72,11 +72,11 @@ WHERE code IN ('CUSTOMER_VIEW', 'CDD_APPROVE', 'ALERT_VIEW', 'CASE_VIEW', 'CASE_
 -- 3. Users (Passwords hashed using BCrypt via pgcrypto)
 INSERT INTO users (id, branch_id, username, email, password_hash, full_name, status)
 VALUES
-('00000000-0000-0000-0005-000000000001', '00000000-0000-0000-0002-000000000001', 'admin', 'admin@globaltrustbank.com', crypt('Admin@123', gen_salt('bf', 10)), 'Chief Compliance Administrator', 'ACTIVE'),
-('00000000-0000-0000-0005-000000000002', '00000000-0000-0000-0002-000000000001', 'sarah.compliance', 's.jenkins@globaltrustbank.com', crypt('Compliance@123', gen_salt('bf', 10)), 'Sarah Jenkins (Head of Compliance)', 'ACTIVE'),
-('00000000-0000-0000-0005-000000000003', '00000000-0000-0000-0002-000000000001', 'david.mlro', 'd.vance@globaltrustbank.com', crypt('Mlro@123', gen_salt('bf', 10)), 'David Vance (MLRO)', 'ACTIVE'),
-('00000000-0000-0000-0005-000000000004', '00000000-0000-0000-0002-000000000001', 'alex.analyst', 'a.chen@globaltrustbank.com', crypt('Analyst@123', gen_salt('bf', 10)), 'Alex Chen (Senior AML Analyst)', 'ACTIVE'),
-('00000000-0000-0000-0005-000000000005', '00000000-0000-0000-0002-000000000001', 'priya.analyst', 'p.sharma@globaltrustbank.com', crypt('Analyst@123', gen_salt('bf', 10)), 'Priya Sharma (AML Analyst)', 'ACTIVE'),
+('00000000-0000-0000-0005-000000000001', '00000000-0000-0000-0002-000000000001', 'admin', 'admin@globaltrustbank.com', '.tXhJ7x4kLLu2h0rNQ2z3Q6e4pQ1wK1Hb1R2hy7M7Q.2', 'Chief Compliance Administrator', 'ACTIVE'),
+('00000000-0000-0000-0005-000000000002', '00000000-0000-0000-0002-000000000001', 'sarah.compliance', 's.jenkins@globaltrustbank.com', '', 'Sarah Jenkins (Head of Compliance)', 'ACTIVE'),
+('00000000-0000-0000-0005-000000000003', '00000000-0000-0000-0002-000000000001', 'david.mlro', 'd.vance@globaltrustbank.com', '.xb2Q9oI9XXFz3T0cyx3yql8L2nL0d0S', 'David Vance (MLRO)', 'ACTIVE'),
+('00000000-0000-0000-0005-000000000004', '00000000-0000-0000-0002-000000000001', 'alex.analyst', 'a.chen@globaltrustbank.com', '', 'Alex Chen (Senior AML Analyst)', 'ACTIVE'),
+('00000000-0000-0000-0005-000000000005', '00000000-0000-0000-0002-000000000001', 'priya.analyst', 'p.sharma@globaltrustbank.com', '', 'Priya Sharma (AML Analyst)', 'ACTIVE'),
 ('00000000-0000-0000-0005-000000000006', '00000000-0000-0000-0002-000000000001', 'james.auditor', 'j.miller@globaltrustbank.com', crypt('Auditor@123', gen_salt('bf', 10)), 'James Miller (Internal Auditor)', 'ACTIVE');
 
 INSERT INTO user_roles (user_id, role_id)
@@ -229,9 +229,9 @@ VALUES
 -- 13. Audit Events
 INSERT INTO audit_events (correlation_id, actor_username, actor_role, client_ip, module, action, entity_type, entity_id, details)
 VALUES
-(gen_random_uuid()::text, 'admin', 'ROLE_ADMIN', '127.0.0.1', 'IAM', 'LOGIN', 'USER', '00000000-0000-0000-0005-000000000001', 'Successful administrative authentication with MFA verified.'),
-(gen_random_uuid()::text, 'alex.analyst', 'ROLE_SENIOR_ANALYST', '192.168.1.42', 'ALERTS', 'DISPOSITION', 'ALERT', '00000000-0000-0000-0060-000000000001', 'Alert ALT-2026-0001 escalated to Case CASE-2026-0001.'),
-(gen_random_uuid()::text, 'david.mlro', 'ROLE_MLRO', '192.168.1.15', 'CASES', 'UPDATE', 'CASE', '00000000-0000-0000-0070-000000000001', 'Account freeze confirmed for Meridian Commodities Global Ltd.');
+(RANDOM_UUID()::text, 'admin', 'ROLE_ADMIN', '127.0.0.1', 'IAM', 'LOGIN', 'USER', '00000000-0000-0000-0005-000000000001', 'Successful administrative authentication with MFA verified.'),
+(RANDOM_UUID()::text, 'alex.analyst', 'ROLE_SENIOR_ANALYST', '192.168.1.42', 'ALERTS', 'DISPOSITION', 'ALERT', '00000000-0000-0000-0060-000000000001', 'Alert ALT-2026-0001 escalated to Case CASE-2026-0001.'),
+(RANDOM_UUID()::text, 'david.mlro', 'ROLE_MLRO', '192.168.1.15', 'CASES', 'UPDATE', 'CASE', '00000000-0000-0000-0070-000000000001', 'Account freeze confirmed for Meridian Commodities Global Ltd.');
 
 -- 14. Notifications
 INSERT INTO notifications (recipient_user_id, title, message, notification_type, severity, is_read, link_url)

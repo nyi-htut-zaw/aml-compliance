@@ -2,7 +2,7 @@
 -- DEMO PLATFORM: This does NOT create a real FIU submission system.
 
 CREATE TABLE regulatory_reports (
-    id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id                  UUID PRIMARY KEY DEFAULT RANDOM_UUID(),
     report_number       VARCHAR(50)   NOT NULL UNIQUE,
     report_type         VARCHAR(20)   NOT NULL,                          -- SAR, STR, CTR
     case_id             UUID          NOT NULL REFERENCES cases(id),
