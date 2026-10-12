@@ -47,6 +47,7 @@ export interface CustomerDto {
   id: string;
   customerNumber: string;
   fullName: string;
+  fullNameMyanmar?: string;
   tradeName?: string;
   customerType: 'INDIVIDUAL' | 'LEGAL_ENTITY';
   jurisdictionCountry: string;
@@ -64,14 +65,18 @@ export interface CustomerDto {
 
 export interface CustomerCreateDto {
   fullName: string;
+  fullNameMyanmar?: string;
   customerType: string;
   jurisdictionCountry: string;
   dateOfBirthOrIncorp: string;
-  riskRating: string;
+  pep?: boolean;
   occupationOrIndustry?: string;
   sourceOfWealth?: string;
   sourceOfFunds?: string;
   taxIdentifier?: string;
+  idType?: string;
+  idNumber?: string;
+  issuingCountry?: string;
 }
 
 // ── Alert Models ──────────────────────────────────────────────────────────────

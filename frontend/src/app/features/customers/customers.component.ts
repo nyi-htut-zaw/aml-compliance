@@ -72,6 +72,7 @@ import { CustomerDto, CustomerCreateDto } from '../../core/models/models';
                 <td>
                   <div class="name-cell">
                     <strong>{{ c.fullName }}</strong>
+                    <span *ngIf="c.fullNameMyanmar" class="trade-name">{{ c.fullNameMyanmar }}</span>
                     <span *ngIf="c.tradeName" class="trade-name">{{ c.tradeName }}</span>
                   </div>
                 </td>
@@ -114,6 +115,7 @@ import { CustomerDto, CustomerCreateDto } from '../../core/models/models';
           <div class="drawer-header">
             <div>
               <h3>{{ selectedCustomer.fullName }}</h3>
+              <span *ngIf="selectedCustomer.fullNameMyanmar" class="drawer-sub" lang="my">{{ selectedCustomer.fullNameMyanmar }}</span>
               <span class="drawer-sub">Customer ID: {{ selectedCustomer.customerNumber }}</span>
             </div>
             <button class="close-btn" (click)="selectedCustomer = null">
@@ -217,6 +219,10 @@ import { CustomerDto, CustomerCreateDto } from '../../core/models/models';
                 <input type="text" [(ngModel)]="newCustomer.fullName" name="fullName" required placeholder="e.g. Apex Global Logistics Ltd" />
               </div>
               <div class="form-group">
+                <label>Myanmar-script Name (optional)</label>
+                <input type="text" [(ngModel)]="newCustomer.fullNameMyanmar" name="fullNameMyanmar" lang="my" />
+              </div>
+              <div class="form-group">
                 <label>Customer Type</label>
                 <select [(ngModel)]="newCustomer.customerType" name="customerType">
                   <option value="INDIVIDUAL">INDIVIDUAL</option>
@@ -227,8 +233,8 @@ import { CustomerDto, CustomerCreateDto } from '../../core/models/models';
 
             <div class="form-row">
               <div class="form-group">
-                <label>Jurisdiction Country (ISO-2)</label>
-                <input type="text" [(ngModel)]="newCustomer.jurisdictionCountry" name="jurisdictionCountry" required placeholder="US, GB, DE, SG..." />
+                <label>Jurisdiction Country (ISO-3)</label>
+                <input type="text" [(ngModel)]="newCustomer.jurisdictionCountry" name="jurisdictionCountry" required placeholder="MMR, SGP, THA..." />
               </div>
               <div class="form-group">
                 <label>Date of Birth / Incorp</label>
@@ -238,17 +244,30 @@ import { CustomerDto, CustomerCreateDto } from '../../core/models/models';
 
             <div class="form-row">
               <div class="form-group">
-                <label>Initial Risk Assessment</label>
-                <select [(ngModel)]="newCustomer.riskRating" name="riskRating">
-                  <option value="LOW">LOW</option>
-                  <option value="MEDIUM">MEDIUM</option>
-                  <option value="HIGH">HIGH</option>
-                  <option value="CRITICAL">CRITICAL</option>
+                <label>Primary Identification Type</label>
+                <select [(ngModel)]="newCustomer.idType" name="idType">
+                  <option value="NRC_MY">Myanmar NRC</option>
+                  <option value="PASSPORT">Passport</option>
+                  <option value="NATIONAL_ID">Other National ID</option>
+                  <option value="INCORP_CERT">Certificate of Incorporation</option>
                 </select>
               </div>
               <div class="form-group">
+                <label>Identification Number (optional)</label>
+                <input type="text" [(ngModel)]="newCustomer.idNumber" name="idNumber" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
                 <label>Occupation / Industry</label>
                 <input type="text" [(ngModel)]="newCustomer.occupationOrIndustry" name="industry" placeholder="e.g. Freight Forwarding" />
+              </div>
+              <div class="form-group">
+                <label>
+                  <input type="checkbox" [(ngModel)]="newCustomer.pep" name="pep" />
+                  Identified as a PEP (requires compliance review)
+                </label>
               </div>
             </div>
 
@@ -682,10 +701,13 @@ export class CustomersComponent implements OnInit {
   onboardingLoading = false;
   newCustomer: CustomerCreateDto = {
     fullName: '',
+    fullNameMyanmar: '',
     customerType: 'INDIVIDUAL',
-    jurisdictionCountry: 'US',
-    dateOfBirthOrIncorp: '1985-05-12',
-    riskRating: 'MEDIUM',
+    jurisdictionCountry: 'MMR',
+    dateOfBirthOrIncorp: '',
+    idType: 'NRC_MY',
+    issuingCountry: 'MMR',
+    pep: false,
     occupationOrIndustry: ''
   };
 

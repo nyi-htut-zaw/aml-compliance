@@ -138,6 +138,8 @@ docker compose up --build
 | `V1__initial_schema.sql` | 37 normalized tables with FK constraints, indexes |
 | `V2__synthetic_seed_data.sql` | Org, users, roles, watchlists, rules, customers, transactions, alerts, cases |
 | `V3__regulatory_reports_table.sql` | SAR/STR/CTR report lifecycle table |
+| `V4__fix_regulatory_report_schema.sql` | Compatibility migration for legacy regulatory-report schemas |
+| `V5__add_myanmar_customer_name.sql` | Optional Myanmar-script customer name |
 
 ---
 
@@ -164,6 +166,8 @@ Tests use H2 in-memory PostgreSQL compatibility mode with Flyway migrations.
 ---
 
 ## AML Rules Implemented
+
+> **Myanmar configuration note:** Myanmar-script customer names and optional `NRC_MY` identifiers are supported. Country of nationality/jurisdiction alone does not assign a high-risk rating. Existing seeded transaction rules and values below are synthetic demonstration settings, not Myanmar legal thresholds or approved bank policy; review and configure them with the bank's approved, effective-dated requirements before operational use.
 
 | Rule Code | Name | Description |
 |-----------|------|-------------|

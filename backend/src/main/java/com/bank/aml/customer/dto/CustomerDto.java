@@ -8,6 +8,7 @@ public class CustomerDto {
     private String customerNumber;
     private String customerType;
     private String fullName;
+    private String fullNameMyanmar;
     private String tradeName;
     private String jurisdictionCountry;
     private LocalDate dateOfBirthOrIncorp;
@@ -32,6 +33,8 @@ public class CustomerDto {
     public void setCustomerType(String customerType) { this.customerType = customerType; }
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getFullNameMyanmar() { return fullNameMyanmar; }
+    public void setFullNameMyanmar(String fullNameMyanmar) { this.fullNameMyanmar = fullNameMyanmar; }
     public String getTradeName() { return tradeName; }
     public void setTradeName(String tradeName) { this.tradeName = tradeName; }
     public String getJurisdictionCountry() { return jurisdictionCountry; }

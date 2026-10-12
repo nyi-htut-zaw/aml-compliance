@@ -29,6 +29,9 @@ public class Customer {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
+    @Column(name = "full_name_myanmar", length = 255)
+    private String fullNameMyanmar;
+
     @Column(name = "trade_name")
     private String tradeName;
 
@@ -101,6 +104,8 @@ public class Customer {
     public void setCustomerNumber(String customerNumber) { this.customerNumber = customerNumber; }
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getFullNameMyanmar() { return fullNameMyanmar; }
+    public void setFullNameMyanmar(String fullNameMyanmar) { this.fullNameMyanmar = fullNameMyanmar; }
     public String getTradeName() { return tradeName; }
     public void setTradeName(String tradeName) { this.tradeName = tradeName; }
     public String getJurisdictionCountry() { return jurisdictionCountry; }

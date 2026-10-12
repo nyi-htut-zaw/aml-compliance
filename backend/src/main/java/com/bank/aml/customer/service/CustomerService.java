@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -63,6 +62,7 @@ public class CustomerService {
         dto.setCustomerNumber(customer.getCustomerNumber());
         dto.setCustomerType(customer.getCustomerType());
         dto.setFullName(customer.getFullName());
+        dto.setFullNameMyanmar(customer.getFullNameMyanmar());
         dto.setTradeName(customer.getTradeName());
         dto.setJurisdictionCountry(customer.getJurisdictionCountry());
         dto.setDateOfBirthOrIncorp(customer.getDateOfBirthOrIncorp());
@@ -109,6 +109,7 @@ public class CustomerService {
         customer.setCustomerType(createDto.getCustomerType());
         customer.setCustomerNumber("CUST-GTB-" + ThreadLocalRandom.current().nextInt(2000, 9999));
         customer.setFullName(createDto.getFullName());
+        customer.setFullNameMyanmar(createDto.getFullNameMyanmar());
         customer.setTradeName(createDto.getTradeName());
         customer.setJurisdictionCountry(createDto.getJurisdictionCountry().toUpperCase());
         customer.setDateOfBirthOrIncorp(createDto.getDateOfBirthOrIncorp());
@@ -119,7 +120,7 @@ public class CustomerService {
         customer.setPep(createDto.isPep());
 
         // Initial risk rating assessment
-        if (createDto.isPep() || List.of("IRN", "PRK", "RUS", "SYR", "CYP").contains(createDto.getJurisdictionCountry().toUpperCase())) {
+        if (createDto.isPep()) {
             customer.setRiskRating("HIGH");
             customer.setKycStatus("UNDER_EDD");
         } else {
@@ -170,6 +171,7 @@ public class CustomerService {
         dto.setCustomerNumber(customer.getCustomerNumber());
         dto.setCustomerType(customer.getCustomerType());
         dto.setFullName(customer.getFullName());
+        dto.setFullNameMyanmar(customer.getFullNameMyanmar());
         dto.setTradeName(customer.getTradeName());
         dto.setJurisdictionCountry(customer.getJurisdictionCountry());
         dto.setDateOfBirthOrIncorp(customer.getDateOfBirthOrIncorp());

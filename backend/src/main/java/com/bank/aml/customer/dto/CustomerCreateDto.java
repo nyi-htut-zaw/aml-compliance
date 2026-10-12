@@ -3,6 +3,7 @@ package com.bank.aml.customer.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
@@ -13,7 +14,11 @@ public class CustomerCreateDto {
     private String customerType;
 
     @NotBlank(message = "Full name is required")
+    @Size(max = 255, message = "Full name must be at most 255 characters")
     private String fullName;
+
+    @Size(max = 255, message = "Myanmar-script name must be at most 255 characters")
+    private String fullNameMyanmar;
 
     private String tradeName;
 
@@ -46,6 +51,8 @@ public class CustomerCreateDto {
     public void setCustomerType(String customerType) { this.customerType = customerType; }
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getFullNameMyanmar() { return fullNameMyanmar; }
+    public void setFullNameMyanmar(String fullNameMyanmar) { this.fullNameMyanmar = fullNameMyanmar; }
     public String getTradeName() { return tradeName; }
     public void setTradeName(String tradeName) { this.tradeName = tradeName; }
     public String getJurisdictionCountry() { return jurisdictionCountry; }
